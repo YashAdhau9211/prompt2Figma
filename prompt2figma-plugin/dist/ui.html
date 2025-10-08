@@ -1,0 +1,2505 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Prompt2Figma</title>
+  <style>/* Reset and Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: #f8fafc;
+  color: #1a1a1a;
+  line-height: 1.5;
+  overflow-x: hidden;
+  font-size: 14px;
+}
+
+/* App Container */
+#app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  margin: 0;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+/* Header */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  background: #ffffff;
+}
+
+.logo-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 2px;
+  width: 28px;
+  height: 28px;
+}
+
+.logo-square {
+  border-radius: 3px;
+}
+
+.logo-square.purple {
+  background: #8b5cf6;
+}
+
+.logo-square.green {
+  background: #10b981;
+}
+
+.logo-square.orange {
+  background: #f59e0b;
+}
+
+.logo-square.red {
+  background: #ef4444;
+}
+
+.logo-text h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a1a1a;
+  letter-spacing: -0.01em;
+  margin-bottom: 1px;
+}
+
+.tagline {
+  font-size: 10px;
+  font-weight: 600;
+  color: #9ca3af;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.settings-btn {
+  background: none;
+  border: none;
+  padding: 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #9ca3af;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.settings-btn:hover {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+.version-badge {
+  background: #6366f1;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Main Content */
+.main-content {
+  flex: 1;
+  padding: 0 24px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* AI Badge */
+.ai-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #f0f9ff;
+  color: #0369a1;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin: 16px auto 0 auto;
+  width: fit-content;
+  border: 1px solid #e0f2fe;
+}
+
+/* Hero Section */
+.hero-section {
+  text-align: center;
+  padding: 24px 0 28px 0;
+}
+
+.hero-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: #1a1a1a;
+  letter-spacing: -0.01em;
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+
+.hero-subtitle {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin-bottom: 16px;
+  line-height: 1.3;
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #6366f1 0%, #06b6d4 50%, #10b981 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-description {
+  font-size: 14px;
+  color: #9ca3af;
+  line-height: 1.5;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+/* Device Selector */
+.device-selector {
+  padding: 20px 24px;
+  text-align: center;
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #f3f4f6;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+}
+
+.device-selector:hover {
+  border-color: #e5e7eb;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.device-selector-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b7280;
+  margin-bottom: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  transition: color 0.2s ease;
+}
+
+.device-toggle-group {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.device-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 18px;
+  background: #f9fafb;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+  min-width: 110px;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+/* Inactive state (default) */
+.device-option {
+  background: #f9fafb;
+  border-color: #e5e7eb;
+  color: #6b7280;
+}
+
+/* Hover state with enhanced feedback */
+.device-option:hover:not(.active) {
+  background: #f3f4f6;
+  border-color: #d1d5db;
+  color: #374151;
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Active state with smooth animation */
+.device-option.active {
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  border-color: #7c3aed;
+  color: white;
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 6px 16px rgba(139, 92, 246, 0.3);
+  animation: deviceActivate 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.device-option.active:hover {
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+  border-color: #6d28d9;
+  box-shadow: 0 8px 20px rgba(139, 92, 246, 0.4);
+  transform: translateY(-3px) scale(1.04);
+}
+
+/* Icon styling with enhanced transitions */
+.device-icon {
+  color: inherit;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.device-option:hover:not(.active) .device-icon {
+  color: #374151;
+  transform: scale(1.1);
+}
+
+.device-option.active .device-icon {
+  color: white;
+  transform: scale(1.15);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+/* Label styling with smooth transitions */
+.device-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: inherit;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  letter-spacing: 0.01em;
+}
+
+.device-option:hover:not(.active) .device-label {
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.device-option.active .device-label {
+  font-weight: 700;
+  color: white;
+  letter-spacing: 0.02em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Focus states for accessibility with enhanced visibility */
+.device-option:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.25);
+  border-color: #8b5cf6;
+  z-index: 1;
+}
+
+.device-option:focus:not(.active) {
+  border-color: #8b5cf6;
+  background: #faf5ff;
+}
+
+.device-option:focus.active {
+  box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.4), 0 6px 16px rgba(139, 92, 246, 0.3);
+}
+
+/* High contrast focus indicator for better visibility */
+.device-option:focus-visible {
+  outline: 3px solid #8b5cf6;
+  outline-offset: 2px;
+}
+
+/* Ensure focus is visible even when active */
+.device-option.active:focus {
+  box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.5), 0 6px 16px rgba(139, 92, 246, 0.3);
+}
+
+/* Active state shimmer animation */
+.device-option.active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  pointer-events: none;
+  animation: shimmer 2s infinite;
+}
+
+/* Smooth state transitions for all child elements */
+.device-option * {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Pressed/active state for better tactile feedback */
+.device-option:active {
+  transform: translateY(0) scale(0.98);
+  transition-duration: 0.1s;
+}
+
+.device-option.active:active {
+  transform: translateY(-1px) scale(1.01);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.35);
+}
+
+/* Description styling with fade-in animation */
+.device-description {
+  font-size: 11px;
+  color: #9ca3af;
+  line-height: 1.5;
+  max-width: 300px;
+  margin: 0 auto;
+  font-weight: 400;
+  transition: color 0.2s ease;
+}
+
+/* Activation animation */
+@keyframes deviceActivate {
+  0% {
+    transform: translateY(0) scale(1);
+    box-shadow: 0 2px 4px rgba(139, 92, 246, 0.1);
+  }
+
+  50% {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 20px rgba(139, 92, 246, 0.35);
+  }
+
+  100% {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 6px 16px rgba(139, 92, 246, 0.3);
+  }
+}
+
+/* Shimmer effect for active state */
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+
+  100% {
+    left: 200%;
+  }
+}
+
+/* Input Section */
+.input-section {
+  background: #ffffff;
+}
+
+.input-container {
+  position: relative;
+}
+
+.input-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.input-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #9ca3af;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.character-count {
+  font-size: 12px;
+  color: #d1d5db;
+  font-weight: 500;
+}
+
+.input-wrapper {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  overflow: hidden;
+  position: relative;
+}
+
+.input-wrapper:focus-within {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.05);
+}
+
+#promptInput {
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 16px;
+  font-size: 14px;
+  font-family: inherit;
+  line-height: 1.5;
+  resize: none;
+  outline: none;
+  color: #374151;
+  min-height: 100px;
+}
+
+#promptInput::placeholder {
+  color: #d1d5db;
+  line-height: 1.5;
+}
+
+/* Templates Section */
+.templates-section {
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+
+.templates-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #6b7280;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.template-buttons {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.template-btn {
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  color: #6b7280;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.template-btn:hover {
+  background: #e5e7eb;
+  color: #374151;
+  border-color: #d1d5db;
+}
+
+.template-btn:active {
+  background: #6366f1;
+  color: white;
+  border-color: #6366f1;
+}
+
+.input-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+}
+
+.input-tips {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: #9ca3af;
+  flex: 1;
+}
+
+.footer-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.clear-btn {
+  background: none;
+  border: none;
+  padding: 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #9ca3af;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.clear-btn:hover {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+.enhance-btn {
+  background: #a855f7;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.2s ease;
+}
+
+.enhance-btn:hover {
+  background: #9333ea;
+  transform: translateY(-1px);
+}
+
+/* Progress Section */
+.progress-section {
+  margin: 16px 0;
+  animation: slideIn 0.3s ease-out;
+}
+
+.progress-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 0;
+}
+
+.progress-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  opacity: 0.4;
+  transition: all 0.3s ease;
+}
+
+.progress-step.active {
+  opacity: 1;
+}
+
+.progress-step.completed {
+  opacity: 1;
+}
+
+.step-number {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #e5e7eb;
+  color: #9ca3af;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.progress-step.active .step-number {
+  background: #6366f1;
+  color: white;
+}
+
+.progress-step.completed .step-number {
+  background: #22c55e;
+  color: white;
+}
+
+.step-label {
+  font-size: 10px;
+  font-weight: 500;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.progress-step.active .step-label,
+.progress-step.completed .step-label {
+  color: #374151;
+}
+
+.progress-line {
+  width: 40px;
+  height: 2px;
+  background: #e5e7eb;
+  margin: 0 8px;
+}
+
+/* Action Buttons */
+.actions-section {
+  display: flex;
+  gap: 12px;
+}
+
+.primary-btn,
+.secondary-btn {
+  position: relative;
+  border: none;
+  border-radius: 10px;
+  padding: 14px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  overflow: hidden;
+  flex: 1;
+}
+
+.primary-btn {
+  background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%);
+  color: white;
+  box-shadow: 0 2px 4px rgba(139, 92, 246, 0.2);
+}
+
+.primary-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(139, 92, 246, 0.3);
+}
+
+.primary-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.secondary-btn {
+  background: #f8fafc;
+  color: #9ca3af;
+  border: 1px solid #e5e7eb;
+}
+
+.secondary-btn:hover:not(:disabled) {
+  background: #f1f5f9;
+  color: #6b7280;
+  border-color: #d1d5db;
+}
+
+.secondary-btn:disabled {
+  background: #f8fafc;
+  color: #d1d5db;
+  cursor: not-allowed;
+  border-color: #e5e7eb;
+}
+
+.btn-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: opacity 0.2s ease;
+}
+
+.btn-loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.loading .btn-content {
+  opacity: 0;
+}
+
+.loading .btn-loader {
+  opacity: 1;
+}
+
+/* Spinner */
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.secondary-btn .spinner {
+  border: 2px solid #e5e7eb;
+  border-top: 2px solid #8b5cf6;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Status Section */
+.status-section {
+  animation: slideIn 0.3s ease-out;
+}
+
+.status-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 20px;
+  border-radius: 12px;
+  border-left: 4px solid;
+}
+
+.status-card.success {
+  background: #f0fdf4;
+  border-left-color: #22c55e;
+}
+
+.status-card.error {
+  background: #fef2f2;
+  border-left-color: #ef4444;
+}
+
+.status-card.loading {
+  background: #fef3c7;
+  border-left-color: #f59e0b;
+}
+
+.status-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.status-card.success .status-icon {
+  background: #22c55e;
+  color: white;
+}
+
+.status-card.error .status-icon {
+  background: #ef4444;
+  color: white;
+}
+
+.status-card.loading .status-icon {
+  background: #f59e0b;
+  color: white;
+}
+
+.status-title {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.status-message {
+  font-size: 13px;
+  color: #6b7280;
+  line-height: 1.4;
+}
+
+/* Output Section */
+.output-section {
+  animation: slideIn 0.3s ease-out;
+}
+
+.output-section .section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.copy-btn {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #374151;
+  transition: all 0.2s ease;
+}
+
+.copy-btn:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.copy-btn.copied {
+  background: #22c55e;
+  border-color: #22c55e;
+  color: white;
+}
+
+.code-container {
+  background: #1e293b;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #334155;
+}
+
+#codeOutput {
+  background: transparent;
+  color: #e2e8f0;
+  padding: 24px;
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  max-height: 300px;
+  overflow: auto;
+  margin: 0;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* Custom Scrollbar */
+#codeOutput::-webkit-scrollbar {
+  width: 8px;
+}
+
+#codeOutput::-webkit-scrollbar-track {
+  background: #334155;
+}
+
+#codeOutput::-webkit-scrollbar-thumb {
+  background: #475569;
+  border-radius: 4px;
+}
+
+#codeOutput::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* Remove footer styles since we're not using footer in this design */
+
+/* Screen reader only content */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Animations */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.8;
+  }
+}
+
+/* Device preference notification styling */
+.device-preference-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 14px 18px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  z-index: 1000;
+  max-width: 320px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  animation: slideInRight 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  line-height: 1.4;
+}
+
+.device-preference-notification.error {
+  background: #fee2e2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+.device-preference-notification.warning {
+  background: #fef3c7;
+  color: #d97706;
+  border: 1px solid #fed7aa;
+}
+
+.device-preference-notification.info {
+  background: #dbeafe;
+  color: #2563eb;
+  border: 1px solid #bfdbfe;
+}
+
+.device-preference-notification.success {
+  background: #d1fae5;
+  color: #059669;
+  border: 1px solid #a7f3d0;
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+  .main-content {
+    padding: 24px 16px;
+    gap: 24px;
+  }
+
+  .header {
+    padding: 16px;
+  }
+
+  .logo h1 {
+    font-size: 18px;
+  }
+
+  .actions-section {
+    gap: 8px;
+  }
+
+  .primary-btn,
+  .secondary-btn {
+    padding: 14px 20px;
+    min-height: 48px;
+  }
+
+  .footer {
+    padding: 16px;
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+}</style>
+
+</head>
+
+<body>
+  <div id="app">
+    <!-- Header -->
+    <div class="header">
+      <div class="logo-section">
+        <div class="logo-icon">
+          <div class="logo-grid">
+            <div class="logo-square purple"></div>
+            <div class="logo-square green"></div>
+            <div class="logo-square orange"></div>
+            <div class="logo-square red"></div>
+          </div>
+        </div>
+        <div class="logo-text">
+          <h1>Prompt2Figma</h1>
+          <p class="tagline">AI WIREFRAME GENERATOR</p>
+        </div>
+      </div>
+      <div class="header-controls">
+        <button class="settings-btn" title="Settings">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" />
+            <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1" stroke="currentColor" stroke-width="2" />
+          </svg>
+        </button>
+        <div class="version-badge">v1.0</div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <!-- AI Badge -->
+      <div class="ai-badge">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+            fill="currentColor" />
+        </svg>
+        AI-POWERED DESIGN
+      </div>
+
+      <!-- Hero Section -->
+      <div class="hero-section">
+        <h2 class="hero-title">Describe Your Interface</h2>
+        <h3 class="hero-subtitle">
+          <span class="gradient-text">Watch AI Build It</span>
+        </h3>
+        <p class="hero-description">
+          Transform natural language descriptions into professional wireframes and React code instantly
+        </p>
+      </div>
+
+      <!-- Device Selector -->
+      <div class="device-selector" role="group" aria-labelledby="device-selector-label">
+        <div id="device-selector-label" class="device-selector-label">Choose Target Device</div>
+        <div class="device-toggle-group" role="radiogroup" aria-labelledby="device-selector-label" aria-describedby="device-description">
+          <button class="device-option mobile" 
+                  data-device="mobile" 
+                  role="radio" 
+                  aria-checked="false"
+                  aria-label="Mobile device - Generate wireframes optimized for mobile screens"
+                  tabindex="0">
+            <svg class="device-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <rect x="5" y="2" width="14" height="20" rx="2" ry="2" stroke="currentColor" stroke-width="2" />
+              <line x1="12" y1="18" x2="12.01" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+            </svg>
+            <span class="device-label">Mobile</span>
+          </button>
+          <button class="device-option desktop" 
+                  data-device="desktop" 
+                  role="radio" 
+                  aria-checked="false"
+                  aria-label="Desktop device - Generate wireframes optimized for desktop screens"
+                  tabindex="-1">
+            <svg class="device-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2" stroke="currentColor" stroke-width="2" />
+              <line x1="8" y1="21" x2="16" y2="21" stroke="currentColor" stroke-width="2" />
+              <line x1="12" y1="17" x2="12" y2="21" stroke="currentColor" stroke-width="2" />
+            </svg>
+            <span class="device-label">Desktop</span>
+          </button>
+        </div>
+        <div id="device-description" class="device-description">Select a device type or leave unselected for AI auto-detection</div>
+      </div>
+
+      <!-- Input Section -->
+      <div class="input-section">
+        <div class="input-container">
+          <div class="input-header">
+            <div class="input-label">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+              </svg>
+              DESCRIBE YOUR INTERFACE
+            </div>
+            <div class="character-count">
+              <span id="charCount">0</span>/500
+            </div>
+          </div>
+
+          <div class="input-wrapper">
+            <textarea id="promptInput"
+              placeholder="Create a modern dashboard with a sidebar navigation, header with user profile, and main content area showing analytics cards..."
+              rows="4"></textarea>
+          </div>
+
+          <!-- Quick Templates -->
+          <div class="templates-section">
+            <div class="templates-label">Quick Templates:</div>
+            <div class="template-buttons">
+              <button class="template-btn" data-template="dashboard">Dashboard</button>
+              <button class="template-btn" data-template="landing">Landing Page</button>
+              <button class="template-btn" data-template="form">Form</button>
+              <button class="template-btn" data-template="mobile">Mobile App</button>
+            </div>
+          </div>
+
+          <div class="input-footer">
+            <div class="input-tips">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+                  stroke="currentColor" stroke-width="2" />
+              </svg>
+              Be specific about layout, components, and styling
+            </div>
+            <div class="footer-actions">
+              <button class="clear-btn" id="clearBtn" title="Clear (Ctrl+K)">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                  <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                </svg>
+              </button>
+              <button class="enhance-btn" id="enhanceBtn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+                    fill="currentColor" />
+                </svg>
+                Enhance
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Progress Steps -->
+      <div class="progress-section" id="progressSection" style="display: none;">
+        <div class="progress-bar">
+          <div class="progress-step active" data-step="1">
+            <div class="step-number">1</div>
+            <div class="step-label">Analyze</div>
+          </div>
+          <div class="progress-line"></div>
+          <div class="progress-step" data-step="2">
+            <div class="step-number">2</div>
+            <div class="step-label">Generate</div>
+          </div>
+          <div class="progress-line"></div>
+          <div class="progress-step" data-step="3">
+            <div class="step-number">3</div>
+            <div class="step-label">Render</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="actions-section">
+        <button class="primary-btn" id="generateWireframeBtn">
+          <div class="btn-content">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <path d="M3 7V5a2 2 0 012-2h14a2 2 0 012 2v2M3 7l9 6 9-6M3 7v10a2 2 0 002 2h14a2 2 0 002-2V7"
+                stroke="currentColor" stroke-width="2" />
+            </svg>
+            <span>Generate Wireframe</span>
+          </div>
+          <div class="btn-loader">
+            <div class="spinner"></div>
+          </div>
+        </button>
+
+        <button class="secondary-btn" id="generateCodeBtn" disabled>
+          <div class="btn-content">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <path d="M16 18L22 12L16 6M8 6L2 12L8 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+            <span>Generate Code</span>
+          </div>
+          <div class="btn-loader">
+            <div class="spinner"></div>
+          </div>
+        </button>
+      </div>
+
+      <!-- Status Section -->
+      <div class="status-section" id="statusSection" style="display: none;">
+        <div class="status-card">
+          <div class="status-icon" id="statusIcon"></div>
+          <div class="status-content">
+            <div class="status-title" id="statusTitle"></div>
+            <div class="status-message" id="statusMessage"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Code Output Section -->
+      <div class="output-section" id="outputSection" style="display: none;">
+        <div class="section-header">
+          <h3>Generated Code</h3>
+          <button class="copy-btn" id="copyBtn" title="Copy to clipboard">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2" stroke="currentColor" stroke-width="2"
+                fill="none" />
+              <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" stroke="currentColor" stroke-width="2"
+                fill="none" />
+            </svg>
+            Copy
+          </button>
+        </div>
+        <div class="code-container">
+          <pre id="codeOutput"></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- This will inline ui.js into dist/ui.html -->
+  <script>let layoutJson = null; // store generated wireframe JSON
+
+// Device selection state management
+let devicePreference = null; // null = auto-detect, 'mobile', 'desktop'
+let sessionStartTime = Date.now(); // Track session start for persistence logic
+
+// Error handling and fallback state
+let devicePreferenceErrors = {
+  transmissionFailures: 0,
+  invalidStates: 0,
+  fallbacksUsed: 0
+};
+
+// Device preference functions with session persistence and error handling
+function setDevicePreference(device) {
+  try {
+    // Validate device preference value
+    if (device !== null && device !== 'mobile' && device !== 'desktop') {
+      console.error(`Invalid device preference: ${device}. Falling back to auto-detect.`);
+      logDevicePreferenceEvent('invalid_state', { 
+        attempted: device, 
+        fallback: 'auto-detect' 
+      });
+      devicePreferenceErrors.invalidStates++;
+      device = null; // Reset to auto-detect
+      showDevicePreferenceNotification('warning', 'Invalid device selection reset to auto-detect');
+    }
+    
+    devicePreference = device;
+    
+    // Store in session storage for persistence during plugin session
+    if (device !== null) {
+      try {
+        sessionStorage.setItem('devicePreference', device);
+        sessionStorage.setItem('devicePreferenceTimestamp', Date.now().toString());
+        logDevicePreferenceEvent('preference_set', { device, persisted: true });
+      } catch (storageError) {
+        console.warn('Failed to persist device preference to session storage:', storageError);
+        logDevicePreferenceEvent('storage_error', { device, error: storageError.message });
+        // Continue without persistence - not critical
+      }
+    } else {
+      // Clear session storage when preference is reset
+      try {
+        sessionStorage.removeItem('devicePreference');
+        sessionStorage.removeItem('devicePreferenceTimestamp');
+        logDevicePreferenceEvent('preference_cleared', { persisted: true });
+      } catch (storageError) {
+        console.warn('Failed to clear device preference from session storage:', storageError);
+        logDevicePreferenceEvent('storage_clear_error', { error: storageError.message });
+      }
+    }
+    
+    updateDeviceUI();
+    
+    // Announce change to screen readers
+    announceDeviceChange(device);
+    
+    console.log(`Device preference set to: ${device || 'auto-detect'} and persisted to session`);
+  } catch (error) {
+    console.error('Error in setDevicePreference:', error);
+    logDevicePreferenceEvent('set_preference_error', { 
+      attempted: device, 
+      error: error.message 
+    });
+    
+    // Fallback to safe state
+    devicePreference = null;
+    updateDeviceUI();
+    showDevicePreferenceNotification('error', 'Device selection error - reset to auto-detect');
+  }
+}
+
+function getDevicePreference() {
+  try {
+    // Validate current device preference state
+    if (devicePreference !== null && devicePreference !== 'mobile' && devicePreference !== 'desktop') {
+      console.error(`Invalid device preference state detected: ${devicePreference}. Resetting to auto-detect.`);
+      logDevicePreferenceEvent('invalid_state_detected', { 
+        invalid: devicePreference, 
+        fallback: 'auto-detect' 
+      });
+      devicePreferenceErrors.invalidStates++;
+      devicePreference = null;
+      updateDeviceUI();
+      showDevicePreferenceNotification('warning', 'Device selection was corrupted - reset to auto-detect');
+    }
+    
+    // Return null when no device is explicitly selected to trigger AI detection
+    return devicePreference;
+  } catch (error) {
+    console.error('Error in getDevicePreference:', error);
+    logDevicePreferenceEvent('get_preference_error', { error: error.message });
+    
+    // Fallback to safe state
+    devicePreference = null;
+    return null;
+  }
+}
+
+function restoreDevicePreference() {
+  try {
+    // Restore device preference from session storage if available
+    const storedPreference = sessionStorage.getItem('devicePreference');
+    const storedTimestamp = sessionStorage.getItem('devicePreferenceTimestamp');
+    
+    if (storedPreference && storedTimestamp) {
+      // Validate stored preference
+      if (storedPreference !== 'mobile' && storedPreference !== 'desktop') {
+        console.error(`Invalid stored device preference: ${storedPreference}. Clearing session data.`);
+        logDevicePreferenceEvent('invalid_stored_preference', { 
+          invalid: storedPreference 
+        });
+        devicePreferenceErrors.invalidStates++;
+        
+        // Clear invalid session data
+        sessionStorage.removeItem('devicePreference');
+        sessionStorage.removeItem('devicePreferenceTimestamp');
+        showDevicePreferenceNotification('warning', 'Stored device preference was invalid - cleared');
+        return false;
+      }
+      
+      const timestamp = parseInt(storedTimestamp);
+      const currentTime = Date.now();
+      
+      // Validate timestamp
+      if (isNaN(timestamp) || timestamp > currentTime) {
+        console.error(`Invalid stored timestamp: ${storedTimestamp}. Clearing session data.`);
+        logDevicePreferenceEvent('invalid_stored_timestamp', { 
+          timestamp: storedTimestamp 
+        });
+        
+        // Clear invalid session data
+        sessionStorage.removeItem('devicePreference');
+        sessionStorage.removeItem('devicePreferenceTimestamp');
+        showDevicePreferenceNotification('warning', 'Session data was corrupted - cleared');
+        return false;
+      }
+      
+      // Check if the stored preference is from the current session (within reasonable time)
+      // Consider it the same session if stored within the last 30 minutes
+      const sessionTimeout = 30 * 60 * 1000; // 30 minutes in milliseconds
+      
+      if (currentTime - timestamp < sessionTimeout) {
+        devicePreference = storedPreference;
+        console.log(`Restored device preference from session: ${storedPreference}`);
+        logDevicePreferenceEvent('preference_restored', { 
+          device: storedPreference, 
+          age: currentTime - timestamp 
+        });
+        return true;
+      } else {
+        // Clear expired session data
+        sessionStorage.removeItem('devicePreference');
+        sessionStorage.removeItem('devicePreferenceTimestamp');
+        console.log('Expired device preference cleared from session storage');
+        logDevicePreferenceEvent('session_expired', { 
+          device: storedPreference, 
+          age: currentTime - timestamp 
+        });
+      }
+    }
+    
+    return false;
+  } catch (error) {
+    console.error('Error restoring device preference:', error);
+    logDevicePreferenceEvent('restore_error', { error: error.message });
+    
+    // Clear potentially corrupted session data
+    try {
+      sessionStorage.removeItem('devicePreference');
+      sessionStorage.removeItem('devicePreferenceTimestamp');
+    } catch (clearError) {
+      console.error('Failed to clear corrupted session data:', clearError);
+    }
+    
+    showDevicePreferenceNotification('error', 'Failed to restore device preference - using auto-detect');
+    return false;
+  }
+}
+
+function clearDevicePreference() {
+  try {
+    devicePreference = null;
+    sessionStorage.removeItem('devicePreference');
+    sessionStorage.removeItem('devicePreferenceTimestamp');
+    updateDeviceUI();
+    console.log('Device preference cleared and removed from session storage');
+    logDevicePreferenceEvent('preference_cleared', { manual: true });
+  } catch (error) {
+    console.error('Error clearing device preference:', error);
+    logDevicePreferenceEvent('clear_error', { error: error.message });
+    
+    // Force reset to safe state
+    devicePreference = null;
+    updateDeviceUI();
+    showDevicePreferenceNotification('warning', 'Device preference cleared with errors');
+  }
+}
+
+// Device preference logging function
+function logDevicePreferenceEvent(eventType, data = {}) {
+  const logEntry = {
+    timestamp: new Date().toISOString(),
+    event: eventType,
+    sessionId: sessionStartTime,
+    currentPreference: devicePreference,
+    errorCounts: { ...devicePreferenceErrors },
+    ...data
+  };
+  
+  console.log(`[DevicePreference] ${eventType}:`, logEntry);
+  
+  // Store recent events for debugging (keep last 50 events)
+  if (!window.devicePreferenceLogs) {
+    window.devicePreferenceLogs = [];
+  }
+  
+  window.devicePreferenceLogs.push(logEntry);
+  if (window.devicePreferenceLogs.length > 50) {
+    window.devicePreferenceLogs.shift();
+  }
+}
+
+// Device preference notification function
+function showDevicePreferenceNotification(type, message) {
+  // Create a brief notification that doesn't interfere with main workflow
+  const notificationElement = document.createElement('div');
+  notificationElement.className = `device-preference-notification ${type}`;
+  
+  // Add icon based on type
+  const iconSvg = type === 'error' 
+    ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="flex-shrink: 0;"><path d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>'
+    : type === 'warning'
+    ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="flex-shrink: 0;"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>'
+    : type === 'success'
+    ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="flex-shrink: 0;"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>'
+    : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="flex-shrink: 0;"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+  
+  notificationElement.innerHTML = `${iconSvg}<span>${message}</span>`;
+  document.body.appendChild(notificationElement);
+  
+  // Auto-remove after 4 seconds with smooth fade out
+  setTimeout(() => {
+    if (notificationElement.parentNode) {
+      notificationElement.style.animation = 'slideOutRight 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+      setTimeout(() => {
+        if (notificationElement.parentNode) {
+          document.body.removeChild(notificationElement);
+        }
+      }, 300);
+    }
+  }, 4000);
+}
+
+function updateDeviceUI() {
+  try {
+    const deviceOptions = document.querySelectorAll('.device-option');
+
+    if (deviceOptions.length === 0) {
+      console.warn('No device option elements found in DOM');
+      logDevicePreferenceEvent('ui_elements_missing', {});
+      return;
+    }
+
+    deviceOptions.forEach(option => {
+      try {
+        const deviceType = option.dataset.device;
+
+        // Validate device type from DOM element
+        if (!deviceType) {
+          console.warn('Device option element missing data-device attribute');
+          return;
+        }
+
+        if (deviceType !== 'mobile' && deviceType !== 'desktop') {
+          console.warn(`Invalid device type in DOM element: ${deviceType}`);
+          return;
+        }
+
+        const wasActive = option.classList.contains('active');
+        const shouldBeActive = devicePreference === deviceType;
+
+        if (shouldBeActive) {
+          option.classList.add('active');
+          option.setAttribute('aria-checked', 'true');
+          option.setAttribute('tabindex', '0');
+          
+          // Add subtle pulse animation on activation
+          if (!wasActive) {
+            option.style.animation = 'none';
+            setTimeout(() => {
+              option.style.animation = '';
+            }, 10);
+          }
+        } else {
+          option.classList.remove('active');
+          option.setAttribute('aria-checked', 'false');
+          option.setAttribute('tabindex', '-1');
+        }
+      } catch (optionError) {
+        console.error('Error updating individual device option:', optionError);
+        logDevicePreferenceEvent('ui_option_update_error', { 
+          error: optionError.message 
+        });
+      }
+    });
+
+    // Ensure at least one option is focusable if none are selected
+    if (devicePreference === null) {
+      const firstOption = deviceOptions[0];
+      if (firstOption) {
+        firstOption.setAttribute('tabindex', '0');
+      }
+    }
+
+    // Add subtle visual feedback to the entire device selector
+    const deviceSelector = document.querySelector('.device-selector');
+    if (deviceSelector && devicePreference !== null) {
+      deviceSelector.style.transform = 'scale(1.01)';
+      setTimeout(() => {
+        deviceSelector.style.transform = '';
+      }, 200);
+    }
+
+    logDevicePreferenceEvent('ui_updated', { 
+      preference: devicePreference,
+      optionCount: deviceOptions.length
+    });
+  } catch (error) {
+    console.error('Error updating device UI:', error);
+    logDevicePreferenceEvent('ui_update_error', { error: error.message });
+    
+    // Try to show error notification if possible
+    try {
+      showDevicePreferenceNotification('error', 'Device selection UI update failed');
+    } catch (notificationError) {
+      console.error('Failed to show error notification:', notificationError);
+    }
+  }
+}
+
+// Initialize session persistence and accessibility features
+function initializeSessionPersistence() {
+  try {
+    // Restore device preference from session storage
+    const restored = restoreDevicePreference();
+    
+    if (restored) {
+      console.log('Device preference restored from session storage');
+      logDevicePreferenceEvent('session_restored', { 
+        preference: devicePreference 
+      });
+    } else {
+      console.log('No valid device preference found in session storage');
+      logDevicePreferenceEvent('session_not_restored', {});
+    }
+    
+    // Initialize UI state
+    updateDeviceUI();
+    
+    // Set up accessibility features
+    initializeAccessibilityFeatures();
+    
+  } catch (error) {
+    console.error('Error initializing session persistence:', error);
+    logDevicePreferenceEvent('initialization_error', { 
+      error: error.message 
+    });
+    
+    // Fallback to safe state
+    devicePreference = null;
+    updateDeviceUI();
+    showDevicePreferenceNotification('warning', 'Session initialization failed - using defaults');
+  }
+}
+
+// Announce device preference changes to screen readers
+function announceDeviceChange(device) {
+  try {
+    const announcements = document.getElementById('device-announcements');
+    if (announcements) {
+      let message;
+      if (device === 'mobile') {
+        message = 'Mobile device selected. Wireframes will be optimized for mobile screens.';
+      } else if (device === 'desktop') {
+        message = 'Desktop device selected. Wireframes will be optimized for desktop screens.';
+      } else {
+        message = 'Device selection cleared. AI will automatically detect the appropriate device type.';
+      }
+      
+      announcements.textContent = message;
+      
+      logDevicePreferenceEvent('screen_reader_announcement', { 
+        device, 
+        message 
+      });
+    }
+  } catch (error) {
+    console.error('Error announcing device change:', error);
+    logDevicePreferenceEvent('announcement_error', { 
+      error: error.message 
+    });
+  }
+}
+
+// Initialize accessibility features
+function initializeAccessibilityFeatures() {
+  try {
+    const deviceOptions = document.querySelectorAll('.device-option');
+    
+    // Ensure proper initial ARIA states
+    deviceOptions.forEach((option, index) => {
+      const deviceType = option.dataset.device;
+      
+      // Set initial ARIA states
+      option.setAttribute('aria-checked', devicePreference === deviceType ? 'true' : 'false');
+      
+      // Set initial tabindex - first option or selected option should be focusable
+      if (devicePreference === deviceType || (devicePreference === null && index === 0)) {
+        option.setAttribute('tabindex', '0');
+      } else {
+        option.setAttribute('tabindex', '-1');
+      }
+    });
+    
+    // Add live region for announcements
+    if (!document.getElementById('device-announcements')) {
+      const announcements = document.createElement('div');
+      announcements.id = 'device-announcements';
+      announcements.className = 'sr-only';
+      announcements.setAttribute('aria-live', 'polite');
+      announcements.setAttribute('aria-atomic', 'true');
+      document.body.appendChild(announcements);
+    }
+    
+    logDevicePreferenceEvent('accessibility_initialized', {
+      optionCount: deviceOptions.length
+    });
+    
+  } catch (error) {
+    console.error('Error initializing accessibility features:', error);
+    logDevicePreferenceEvent('accessibility_init_error', { 
+      error: error.message 
+    });
+  }
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+  // Initialize session persistence and restore device preference
+  initializeSessionPersistence();
+  
+  // Get DOM elements
+  const generateWireframeBtn = document.getElementById("generateWireframeBtn");
+  const generateCodeBtn = document.getElementById("generateCodeBtn");
+  const promptInput = document.getElementById("promptInput");
+  const enhanceBtn = document.getElementById("enhanceBtn");
+  const clearBtn = document.getElementById("clearBtn");
+  const copyBtn = document.getElementById("copyBtn");
+  const charCount = document.getElementById("charCount");
+  const statusSection = document.getElementById("statusSection");
+  const outputSection = document.getElementById("outputSection");
+  const codeOutput = document.getElementById("codeOutput");
+  const progressSection = document.getElementById("progressSection");
+  const templateButtons = document.querySelectorAll(".template-btn");
+  const deviceOptions = document.querySelectorAll(".device-option");
+
+  // Character counter
+  promptInput.addEventListener("input", () => {
+    const count = promptInput.value.length;
+    charCount.textContent = count;
+
+    // Update character count color based on limit
+    if (count > 450) {
+      charCount.style.color = "#ef4444";
+    } else if (count > 400) {
+      charCount.style.color = "#f59e0b";
+    } else {
+      charCount.style.color = "#d1d5db";
+    }
+  });
+
+  // Clear functionality (can be triggered by keyboard shortcut)
+  function clearInput() {
+    promptInput.value = "";
+    charCount.textContent = "0";
+    charCount.style.color = "#d1d5db";
+    promptInput.focus();
+  }
+
+  // Clear button functionality
+  clearBtn.addEventListener("click", clearInput);
+
+  // Keyboard shortcuts
+  promptInput.addEventListener("keydown", (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === "k") {
+      e.preventDefault();
+      clearInput();
+    }
+  });
+
+  // Template buttons functionality
+  templateButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const template = btn.dataset.template;
+      const templateText = getTemplate(template);
+      promptInput.value = templateText;
+      charCount.textContent = templateText.length;
+      promptInput.focus();
+
+      // Visual feedback
+      btn.style.background = "#6366f1";
+      btn.style.color = "white";
+      btn.style.borderColor = "#6366f1";
+
+      setTimeout(() => {
+        btn.style.background = "";
+        btn.style.color = "";
+        btn.style.borderColor = "";
+      }, 200);
+    });
+  });
+
+  // Device selection functionality with enhanced state management, error handling, and keyboard navigation
+  function handleDeviceSelection(deviceType, source = 'click') {
+    try {
+      // Validate device type from UI element
+      if (!deviceType || (deviceType !== 'mobile' && deviceType !== 'desktop')) {
+        console.error(`Invalid device type from UI element: ${deviceType}`);
+        logDevicePreferenceEvent('invalid_ui_device_type', { deviceType, source });
+        showDevicePreferenceNotification('error', 'Invalid device selection - please try again');
+        return;
+      }
+
+      // Toggle selection - if selecting the same device, deselect it
+      if (devicePreference === deviceType) {
+        setDevicePreference(null);
+      } else {
+        setDevicePreference(deviceType);
+      }
+      
+      // Log state change for debugging
+      console.log(`Device selection changed via ${source}. Current preference: ${getDevicePreference()}`);
+      logDevicePreferenceEvent('user_selection', { 
+        selected: deviceType,
+        wasToggleOff: devicePreference !== deviceType,
+        finalState: getDevicePreference(),
+        source: source
+      });
+    } catch (error) {
+      console.error(`Error in device selection ${source} handler:`, error);
+      logDevicePreferenceEvent('ui_interaction_error', { error: error.message, source });
+      showDevicePreferenceNotification('error', 'Device selection failed - please try again');
+      
+      // Reset to safe state
+      try {
+        setDevicePreference(null);
+      } catch (resetError) {
+        console.error('Failed to reset device preference after error:', resetError);
+      }
+    }
+  }
+
+  deviceOptions.forEach(option => {
+    // Click handler
+    option.addEventListener("click", () => {
+      const deviceType = option.dataset.device;
+      handleDeviceSelection(deviceType, 'click');
+    });
+
+    // Keyboard navigation handler
+    option.addEventListener("keydown", (e) => {
+      const deviceType = option.dataset.device;
+      const currentIndex = Array.from(deviceOptions).indexOf(option);
+      
+      switch (e.key) {
+        case 'Enter':
+        case ' ': // Space key
+          e.preventDefault();
+          handleDeviceSelection(deviceType, 'keyboard');
+          break;
+          
+        case 'ArrowLeft':
+        case 'ArrowUp':
+          e.preventDefault();
+          // Move to previous option (with wrapping)
+          const prevIndex = currentIndex === 0 ? deviceOptions.length - 1 : currentIndex - 1;
+          deviceOptions[prevIndex].focus();
+          logDevicePreferenceEvent('keyboard_navigation', { 
+            direction: 'previous', 
+            from: currentIndex, 
+            to: prevIndex 
+          });
+          break;
+          
+        case 'ArrowRight':
+        case 'ArrowDown':
+          e.preventDefault();
+          // Move to next option (with wrapping)
+          const nextIndex = currentIndex === deviceOptions.length - 1 ? 0 : currentIndex + 1;
+          deviceOptions[nextIndex].focus();
+          logDevicePreferenceEvent('keyboard_navigation', { 
+            direction: 'next', 
+            from: currentIndex, 
+            to: nextIndex 
+          });
+          break;
+          
+        case 'Home':
+          e.preventDefault();
+          // Move to first option
+          deviceOptions[0].focus();
+          logDevicePreferenceEvent('keyboard_navigation', { 
+            direction: 'home', 
+            from: currentIndex, 
+            to: 0 
+          });
+          break;
+          
+        case 'End':
+          e.preventDefault();
+          // Move to last option
+          const lastIndex = deviceOptions.length - 1;
+          deviceOptions[lastIndex].focus();
+          logDevicePreferenceEvent('keyboard_navigation', { 
+            direction: 'end', 
+            from: currentIndex, 
+            to: lastIndex 
+          });
+          break;
+          
+        case 'Escape':
+          e.preventDefault();
+          // Clear selection and move focus to first option
+          setDevicePreference(null);
+          deviceOptions[0].focus();
+          logDevicePreferenceEvent('keyboard_clear', { 
+            from: currentIndex 
+          });
+          break;
+      }
+    });
+
+    // Focus handler for screen reader announcements
+    option.addEventListener("focus", () => {
+      const deviceType = option.dataset.device;
+      const isSelected = devicePreference === deviceType;
+      
+      // Update aria-describedby to provide context
+      const statusText = isSelected ? 'Currently selected' : 'Not selected';
+      option.setAttribute('aria-describedby', `device-description device-status-${deviceType}`);
+      
+      // Create or update status element for screen readers
+      let statusElement = document.getElementById(`device-status-${deviceType}`);
+      if (!statusElement) {
+        statusElement = document.createElement('div');
+        statusElement.id = `device-status-${deviceType}`;
+        statusElement.className = 'sr-only';
+        statusElement.setAttribute('aria-live', 'polite');
+        document.body.appendChild(statusElement);
+      }
+      statusElement.textContent = statusText;
+      
+      logDevicePreferenceEvent('focus_received', { 
+        deviceType, 
+        isSelected 
+      });
+    });
+  });
+
+  // Enhance with AI button functionality
+  enhanceBtn.addEventListener("click", async () => {
+    const currentText = promptInput.value.trim();
+    if (!currentText) {
+      showStatus("error", "No Text to Enhance", "Please enter some text first before enhancing.");
+      return;
+    }
+
+    // Show loading state
+    enhanceBtn.disabled = true;
+    enhanceBtn.innerHTML = `
+      <div class="spinner" style="width: 12px; height: 12px; border-width: 2px;"></div>
+      Enhancing...
+    `;
+
+    // Simulate AI enhancement (you can replace this with actual API call)
+    setTimeout(() => {
+      const enhancedText = enhancePrompt(currentText);
+      promptInput.value = enhancedText;
+      charCount.textContent = enhancedText.length;
+
+      // Reset button
+      enhanceBtn.disabled = false;
+      enhanceBtn.innerHTML = `
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="currentColor"/>
+        </svg>
+        Enhance with AI
+      `;
+
+      showStatus("success", "Text Enhanced!", "Your prompt has been improved with AI suggestions.");
+    }, 1500);
+  });
+
+  // Copy button functionality
+  copyBtn.addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(codeOutput.textContent);
+
+      // Visual feedback
+      const originalText = copyBtn.innerHTML;
+      copyBtn.innerHTML = `
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Copied!
+      `;
+      copyBtn.classList.add("copied");
+
+      setTimeout(() => {
+        copyBtn.innerHTML = originalText;
+        copyBtn.classList.remove("copied");
+      }, 2000);
+    } catch (err) {
+      console.error("Failed to copy:", err);
+    }
+  });
+
+  // Generate wireframe
+  generateWireframeBtn.addEventListener("click", async () => {
+    const prompt = promptInput.value.trim();
+    if (!prompt) {
+      showStatus("error", "Empty Prompt", "Please describe your UI vision to get started.");
+      return;
+    }
+
+    if (prompt.length < 10) {
+      showStatus("error", "Too Short", "Please provide a more detailed description (at least 10 characters).");
+      return;
+    }
+
+    // Show loading state
+    setButtonLoading(generateWireframeBtn, true);
+    showProgress();
+    showStatus("loading", "Generating Wireframe", "AI is analyzing your prompt and creating the wireframe...");
+
+    layoutJson = null;
+    generateCodeBtn.disabled = true;
+    hideOutput();
+
+    try {
+      const currentDevicePreference = getDevicePreference();
+      console.log("Sending API request with device preference:", currentDevicePreference);
+      console.log("Device preference maintained across generation:", currentDevicePreference !== null ? "Yes" : "No (using AI detection)");
+      
+      const requestPayload = {
+        prompt,
+        devicePreference: currentDevicePreference
+      };
+      
+      console.log("Full API request payload:", requestPayload);
+      logDevicePreferenceEvent('api_request_sent', { 
+        devicePreference: currentDevicePreference,
+        hasPreference: currentDevicePreference !== null
+      });
+      
+      const res = await fetch("http://localhost:8000/api/v1/generate-wireframe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(requestPayload)
+      });
+
+      const data = await res.json();
+
+      if (data.layout_json) {
+        layoutJson = data.layout_json;
+        completeProgress();
+        
+        // Check if device preference was actually used by the backend
+        const backendUsedPreference = data.devicePreferenceUsed;
+        const backendDetectedDevice = data.detectedDevice;
+        
+        if (currentDevicePreference && !backendUsedPreference) {
+          // Device preference transmission failed, backend fell back to AI detection
+          console.warn("Device preference transmission failed - backend used AI detection");
+          logDevicePreferenceEvent('transmission_failure', {
+            sentPreference: currentDevicePreference,
+            backendDetected: backendDetectedDevice,
+            fallbackUsed: true
+          });
+          devicePreferenceErrors.transmissionFailures++;
+          devicePreferenceErrors.fallbacksUsed++;
+          
+          showDevicePreferenceNotification('warning', 
+            `Device preference not applied - used AI detection (${backendDetectedDevice || 'unknown'})`);
+          showStatus("success", "Wireframe Generated!", 
+            `Your wireframe has been created using AI detection (${backendDetectedDevice || 'auto-detected'}) instead of your device preference.`);
+        } else if (currentDevicePreference && backendUsedPreference) {
+          // Device preference was successfully used
+          logDevicePreferenceEvent('preference_applied', {
+            preference: currentDevicePreference,
+            confirmed: true
+          });
+          showStatus("success", "Wireframe Generated!", 
+            `Your wireframe has been created for ${currentDevicePreference} as requested.`);
+        } else {
+          // No device preference set, AI detection used normally
+          logDevicePreferenceEvent('ai_detection_used', {
+            detectedDevice: backendDetectedDevice
+          });
+          showStatus("success", "Wireframe Generated!", "Your wireframe has been created and added to the Figma canvas.");
+        }
+
+        // Send to main thread to render in Figma with fallback handling
+        const devicePref = getDevicePreference();
+        console.log("Sending device preference to main thread:", devicePref);
+        
+        try {
+          parent.postMessage({ 
+            pluginMessage: { 
+              type: "render-wireframe", 
+              json: layoutJson,
+              devicePreference: devicePref,
+              fallbackInfo: {
+                transmissionFailed: currentDevicePreference && !backendUsedPreference,
+                detectedDevice: backendDetectedDevice
+              }
+            } 
+          }, "*");
+          
+          logDevicePreferenceEvent('render_message_sent', {
+            devicePreference: devicePref,
+            hasFallbackInfo: true
+          });
+        } catch (messageError) {
+          console.error("Failed to send render message to main thread:", messageError);
+          logDevicePreferenceEvent('render_message_error', {
+            error: messageError.message,
+            devicePreference: devicePref
+          });
+          
+          // Fallback: try without device preference
+          try {
+            parent.postMessage({ 
+              pluginMessage: { 
+                type: "render-wireframe", 
+                json: layoutJson
+              } 
+            }, "*");
+            
+            showDevicePreferenceNotification('warning', 'Rendered without device preference due to communication error');
+            logDevicePreferenceEvent('render_fallback_success', {});
+          } catch (fallbackError) {
+            console.error("Fallback render message also failed:", fallbackError);
+            logDevicePreferenceEvent('render_fallback_error', {
+              error: fallbackError.message
+            });
+            throw fallbackError; // Re-throw to trigger main error handling
+          }
+        }
+        
+        generateCodeBtn.disabled = false;
+      } else {
+        hideProgress();
+        logDevicePreferenceEvent('generation_failed', {
+          devicePreference: currentDevicePreference,
+          response: data
+        });
+        showStatus("error", "Generation Failed", "Unable to generate wireframe. Please try rephrasing your prompt.");
+      }
+    } catch (err) {
+      console.error("Backend connection error:", err);
+
+      if (err.name === 'TypeError' && err.message.includes('fetch')) {
+        showStatus("error", "Server Not Running", "Backend server is not running. Please start the server at http://localhost:8000");
+      } else if (err.message.includes('NetworkError') || err.message.includes('Failed to fetch')) {
+        showStatus("error", "Connection Failed", "Cannot connect to backend server. Ensure the server is running at http://localhost:8000");
+      } else {
+        showStatus("error", "Backend Error", `Server error: ${err.message}`);
+      }
+    } finally {
+      setButtonLoading(generateWireframeBtn, false);
+      if (!layoutJson) hideProgress();
+    }
+  });
+
+  // Generate code
+  generateCodeBtn.addEventListener("click", async () => {
+    if (!layoutJson) {
+      showStatus("error", "No Wireframe", "Please generate a wireframe first before creating code.");
+      return;
+    }
+
+    // Show loading state
+    setButtonLoading(generateCodeBtn, true);
+    showStatus("loading", "Generating Code", "Converting your wireframe into clean React code...");
+    hideOutput();
+
+    try {
+      const res = await fetch("http://localhost:8000/api/v1/generate-code", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ layout_json: layoutJson })
+      });
+
+      const data = await res.json();
+
+      if (data.react_code) {
+        showStatus("success", "Code Generated!", `React code created successfully. Validation: ${data.validation_status || 'Passed'}`);
+        showOutput(data.react_code);
+      } else {
+        showStatus("error", "Code Generation Failed", "Unable to generate React code from the wireframe.");
+      }
+    } catch (err) {
+      console.error("Backend connection error:", err);
+
+      if (err.name === 'TypeError' && err.message.includes('fetch')) {
+        showStatus("error", "Server Not Running", "Backend server is not running. Please start the server at http://localhost:8000");
+      } else if (err.message.includes('NetworkError') || err.message.includes('Failed to fetch')) {
+        showStatus("error", "Connection Failed", "Cannot connect to backend server. Ensure the server is running at http://localhost:8000");
+      } else {
+        showStatus("error", "Backend Error", `Server error: ${err.message}`);
+      }
+    } finally {
+      setButtonLoading(generateCodeBtn, false);
+    }
+  });
+
+  // Helper functions
+  function setButtonLoading(button, isLoading) {
+    if (isLoading) {
+      button.classList.add("loading");
+      button.disabled = true;
+    } else {
+      button.classList.remove("loading");
+      button.disabled = false;
+    }
+  }
+
+  function showStatus(type, title, message) {
+    const statusIcon = document.getElementById("statusIcon");
+    const statusTitle = document.getElementById("statusTitle");
+    const statusMessage = document.getElementById("statusMessage");
+    const statusCard = statusSection.querySelector(".status-card");
+
+    // Remove existing status classes
+    statusCard.classList.remove("success", "error", "loading");
+    statusCard.classList.add(type);
+
+    // Set icon based on type
+    let iconSvg = "";
+    switch (type) {
+      case "success":
+        iconSvg = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>`;
+        break;
+      case "error":
+        iconSvg = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>`;
+        break;
+      case "loading":
+        iconSvg = `<div class="spinner" style="width: 16px; height: 16px; border-width: 2px;"></div>`;
+        break;
+    }
+
+    statusIcon.innerHTML = iconSvg;
+    statusTitle.textContent = title;
+    statusMessage.textContent = message;
+    statusSection.style.display = "block";
+  }
+
+  function showOutput(code) {
+    codeOutput.textContent = code;
+    outputSection.style.display = "block";
+  }
+
+  function hideOutput() {
+    outputSection.style.display = "none";
+  }
+
+  // Progress functions
+  function showProgress() {
+    progressSection.style.display = "block";
+    updateProgressStep(1);
+
+    setTimeout(() => updateProgressStep(2), 1000);
+    setTimeout(() => updateProgressStep(3), 2000);
+  }
+
+  function updateProgressStep(step) {
+    const steps = progressSection.querySelectorAll(".progress-step");
+    steps.forEach((stepEl, index) => {
+      stepEl.classList.remove("active", "completed");
+      if (index + 1 < step) {
+        stepEl.classList.add("completed");
+      } else if (index + 1 === step) {
+        stepEl.classList.add("active");
+      }
+    });
+  }
+
+  function completeProgress() {
+    const steps = progressSection.querySelectorAll(".progress-step");
+    steps.forEach(step => {
+      step.classList.remove("active");
+      step.classList.add("completed");
+    });
+
+    setTimeout(() => {
+      hideProgress();
+    }, 1500);
+  }
+
+  function hideProgress() {
+    progressSection.style.display = "none";
+  }
+
+  // Template functions
+  function getTemplate(type) {
+    const templates = {
+      dashboard: "Create a modern admin dashboard with a sidebar navigation containing menu items (Dashboard, Analytics, Users, Settings), a top header with user profile and notifications, and a main content area with metric cards showing key statistics, data visualization charts, and a recent activity table.",
+      landing: "Design a landing page with a hero section featuring a compelling headline and call-to-action button, followed by a features section with 3-4 feature cards, testimonials section, and a footer with contact information and social links.",
+      form: "Build a user registration form with input fields for name, email, password, and confirm password. Include proper validation, clear labels, helpful error messages, and a submit button. Add a clean, professional layout with good spacing.",
+      mobile: "Create a mobile app interface with a bottom tab navigation (Home, Search, Profile, Settings), a header with app title and menu icon, and a main content area with cards or list items. Make it touch-friendly with proper spacing."
+    };
+
+    return templates[type] || "";
+  }
+
+  // Auto-resize textarea
+  promptInput.addEventListener("input", function () {
+    this.style.height = "auto";
+    this.style.height = Math.min(this.scrollHeight, 200) + "px";
+  });
+
+  // Focus on input when plugin loads
+  setTimeout(() => {
+    promptInput.focus();
+  }, 100);
+
+  // Helper function to enhance prompts
+  function enhancePrompt(text) {
+    // Simple AI-like enhancement - you can replace this with actual AI API
+    const enhancements = {
+      'button': 'interactive button with hover states and proper accessibility',
+      'card': 'modern card component with subtle shadows and rounded corners',
+      'dashboard': 'comprehensive dashboard with data visualization, metrics, and user-friendly navigation',
+      'form': 'well-structured form with proper validation, clear labels, and intuitive user flow',
+      'navigation': 'intuitive navigation system with clear hierarchy and responsive design',
+      'sidebar': 'collapsible sidebar with organized menu items and smooth animations',
+      'header': 'professional header with branding, navigation, and user controls',
+      'footer': 'informative footer with links, contact information, and social media integration'
+    };
+
+    let enhanced = text;
+
+    // Add specific enhancements based on keywords
+    Object.keys(enhancements).forEach(keyword => {
+      if (text.toLowerCase().includes(keyword) && !text.toLowerCase().includes(enhancements[keyword])) {
+        enhanced = enhanced.replace(new RegExp(keyword, 'gi'), enhancements[keyword]);
+      }
+    });
+
+    // Add general improvements
+    if (!enhanced.includes('responsive')) {
+      enhanced += ' Make it responsive and mobile-friendly.';
+    }
+
+    if (!enhanced.includes('modern') && !enhanced.includes('clean')) {
+      enhanced += ' Use a modern, clean design aesthetic.';
+    }
+
+    return enhanced;
+  }
+});
+
+// Session persistence initialization function
+function initializeSessionPersistence() {
+  console.log("Initializing session persistence for device selection...");
+  
+  // Attempt to restore device preference from session storage
+  const restored = restoreDevicePreference();
+  
+  if (restored) {
+    // Update UI to reflect restored state
+    updateDeviceUI();
+    console.log("Device preference restored and UI updated");
+  } else {
+    // Ensure UI is in default state
+    devicePreference = null;
+    updateDeviceUI();
+    console.log("Starting with clean device preference state");
+  }
+  
+  // Set up session monitoring
+  setupSessionMonitoring();
+}
+
+// Session monitoring to handle plugin lifecycle
+function setupSessionMonitoring() {
+  try {
+    // Listen for beforeunload to clean up if needed
+    window.addEventListener('beforeunload', () => {
+      console.log("Plugin unloading, session data will persist for next session");
+      logDevicePreferenceEvent('plugin_unload', { 
+        finalPreference: devicePreference,
+        errorCounts: { ...devicePreferenceErrors }
+      });
+    });
+    
+    // Listen for focus events to detect if plugin was reopened
+    window.addEventListener('focus', () => {
+      console.log("Plugin focused, checking session state...");
+      
+      try {
+        // Verify session storage is still valid
+        const storedPreference = sessionStorage.getItem('devicePreference');
+        const storedTimestamp = sessionStorage.getItem('devicePreferenceTimestamp');
+        
+        if (storedPreference && storedTimestamp) {
+          const timestamp = parseInt(storedTimestamp);
+          const currentTime = Date.now();
+          const sessionTimeout = 30 * 60 * 1000; // 30 minutes
+          
+          if (currentTime - timestamp >= sessionTimeout) {
+            // Session expired, clear state
+            clearDevicePreference();
+            console.log("Session expired on focus, cleared device preference");
+          } else {
+            console.log("Session still valid on focus");
+          }
+        }
+      } catch (focusError) {
+        console.error('Error during focus event handling:', focusError);
+        logDevicePreferenceEvent('focus_error', { error: focusError.message });
+      }
+    });
+    
+    // Periodic session validation (every 5 minutes)
+    setInterval(() => {
+      try {
+        const storedTimestamp = sessionStorage.getItem('devicePreferenceTimestamp');
+        if (storedTimestamp) {
+          const timestamp = parseInt(storedTimestamp);
+          const currentTime = Date.now();
+          const sessionTimeout = 30 * 60 * 1000; // 30 minutes
+          
+          if (currentTime - timestamp >= sessionTimeout) {
+            clearDevicePreference();
+            console.log("Session expired during periodic check, cleared device preference");
+          }
+        }
+      } catch (intervalError) {
+        console.error('Error during periodic session check:', intervalError);
+        logDevicePreferenceEvent('periodic_check_error', { error: intervalError.message });
+      }
+    }, 5 * 60 * 1000); // Check every 5 minutes
+    
+    logDevicePreferenceEvent('session_monitoring_setup', {});
+  } catch (error) {
+    console.error('Error setting up session monitoring:', error);
+    logDevicePreferenceEvent('session_monitoring_setup_error', { error: error.message });
+  }
+}
+
+// Debugging and diagnostics functions
+window.getDevicePreferenceStats = function() {
+  return {
+    currentPreference: devicePreference,
+    sessionStartTime: sessionStartTime,
+    errorCounts: { ...devicePreferenceErrors },
+    recentLogs: window.devicePreferenceLogs ? window.devicePreferenceLogs.slice(-10) : [],
+    sessionStorage: {
+      preference: sessionStorage.getItem('devicePreference'),
+      timestamp: sessionStorage.getItem('devicePreferenceTimestamp')
+    }
+  };
+};
+
+window.resetDevicePreferenceErrors = function() {
+  const oldErrors = { ...devicePreferenceErrors };
+  devicePreferenceErrors = {
+    transmissionFailures: 0,
+    invalidStates: 0,
+    fallbacksUsed: 0
+  };
+  logDevicePreferenceEvent('error_counts_reset', { oldErrors });
+  console.log('Device preference error counts reset');
+  return oldErrors;
+};
+
+window.testDevicePreferenceError = function(errorType = 'invalid_state') {
+  console.log(`Testing device preference error: ${errorType}`);
+  
+  switch (errorType) {
+    case 'invalid_state':
+      devicePreference = 'invalid_value';
+      getDevicePreference(); // This will trigger validation and reset
+      break;
+    case 'storage_error':
+      // Temporarily break session storage
+      const originalSetItem = sessionStorage.setItem;
+      sessionStorage.setItem = () => { throw new Error('Test storage error'); };
+      setDevicePreference('mobile');
+      sessionStorage.setItem = originalSetItem;
+      break;
+    case 'ui_error':
+      updateDeviceUI(); // Test with potentially missing DOM elements
+      break;
+    default:
+      console.log('Unknown error type. Available: invalid_state, storage_error, ui_error');
+  }
+};</script>
+</body>
+
+</html>

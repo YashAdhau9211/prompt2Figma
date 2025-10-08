@@ -1,0 +1,55 @@
+Create a modern Spotify-inspired landing page wireframe with a clean, bold, and music-focused design.
+
+Header Section (Top Navigation):
+
+Spotify logo on the left.
+
+Navigation links: 'Premium', 'Support', 'Download'.
+
+Right side: 'Sign Up' and 'Log In' buttons.
+
+Hero Section (Top Banner):
+
+Full-width hero banner placeholder with background image/gradient.
+
+Overlay text: 'Millions of songs. Free on Spotify.'
+
+Primary CTA button: 'Get Spotify Free'.
+
+Secondary CTA button: 'Get Premium'.
+
+Playlist / Content Sections (Scrolling):
+
+Title: 'Recently Played' → horizontal scrollable row of square playlist/album placeholders.
+
+Title: 'Made for You' → personalized playlists row.
+
+Title: 'Trending Now' → horizontal scroll of popular songs/albums.
+
+Title: 'Top Charts' → numbered list style with rectangular album/playlist cards.
+
+Special Highlights Section (Optional):
+
+Banner placeholder for 'Discover Weekly' or 'Release Radar'.
+
+Promotional section for Premium plans with CTA button 'View Plans'.
+
+Footer Section:
+
+Links: 'About', 'Jobs', 'For the Record', 'Privacy Policy', 'Cookies', 'Legal'.
+
+Social media icons: Facebook, Instagram, Twitter.
+
+Text placeholder for '© Spotify'.
+
+Style Details:
+
+Minimal wireframe with focus on structure: rectangles for banners, squares for albums/playlists, lines for text.
+
+Vertical scrolling layout with multiple horizontal content rows.
+
+Clear hierarchy: bold hero banner on top, playlist rows below.
+
+Keep layout mobile-responsive, but design for desktop first.
+
+Generate this as a wireframe only (no high-fidelity images or colors, just placeholders for layout and structure).

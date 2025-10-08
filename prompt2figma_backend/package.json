@@ -1,6 +1,30 @@
 {
+  "name": "prompt2figma-backend",
+  "version": "1.0.0",
+  "description": "Backend for Prompt2Figma - AI-powered UI component generation",
+  "main": "app/tasks/ast_validation.js",
+  "scripts": {
+    "test": "node app/tasks/ast_validation.js",
+    "validate": "node app/tasks/ast_validation.js"
+  },
   "dependencies": {
     "@babel/parser": "^7.28.0",
     "express": "^5.1.0"
-  }
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "keywords": [
+    "figma",
+    "react",
+    "ai",
+    "code-generation",
+    "ui",
+    "ast-validation"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
 }

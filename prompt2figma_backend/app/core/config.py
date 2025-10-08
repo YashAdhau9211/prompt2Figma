@@ -18,6 +18,9 @@ class Settings(BaseSettings):
     
     # This expects an environment variable named CELERY_RESULT_BACKEND
     CELERY_RESULT_BACKEND: str
+    
+    # Redis URL for state store (defaults to same as Celery backend if not specified)
+    REDIS_STATE_STORE_URL: str = "redis://localhost:6379"
 
     class Config:
         # This tells Pydantic to be case-insensitive when matching

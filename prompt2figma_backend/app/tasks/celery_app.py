@@ -15,8 +15,30 @@ celery_app = Celery(
     include=["app.tasks.pipeline"]
 )
 
-# Optional Celery configuration can go here if needed in the future.
-# For now, the basic setup is enough.
+# Celery configuration for better connection stability
 celery_app.conf.update(
     task_track_started=True,
+    # Connection stability settings
+    broker_connection_retry_on_startup=True,
+    broker_connection_retry=True,
+    broker_connection_max_retries=10,
+    broker_heartbeat=30,  # Send heartbeat every 30 seconds
+    broker_pool_limit=10,
+    # Task settings for long-running tasks
+    task_acks_late=False,  # Changed to False to prevent redelivery on connection drops
+    worker_prefetch_multiplier=1,
+    task_reject_on_worker_lost=True,  # Reject tasks if worker is lost
+    # Result backend settings
+    result_backend_transport_options={
+        'master_name': 'mymaster',
+        'retry_on_timeout': True,
+        'socket_keepalive': True,
+        'socket_keepalive_options': {
+            'TCP_KEEPIDLE': 1,
+            'TCP_KEEPINTVL': 3,
+            'TCP_KEEPCNT': 5,
+        }
+    },
+    # Enable connection recovery
+    worker_cancel_long_running_tasks_on_connection_loss=False,
 )
