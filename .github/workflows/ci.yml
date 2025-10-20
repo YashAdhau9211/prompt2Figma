@@ -16,7 +16,7 @@ jobs:
     
     strategy:
       matrix:
-        python-version: [3.8, 3.9, '3.10', 3.11]
+        python-version: [3.9, '3.10', 3.11]
     
     services:
       redis:
@@ -100,7 +100,7 @@ jobs:
     
     - name: Install dependencies
       working-directory: ./prompt2Figma-Frontend (Plugin)
-      run: npm ci
+      run: npm install
     
     - name: Run tests with coverage
       working-directory: ./prompt2Figma-Frontend (Plugin)
@@ -151,7 +151,7 @@ jobs:
     
     - name: Install Node dependencies
       working-directory: ./prompt2Figma-Frontend (Plugin)
-      run: npm ci
+      run: npm install
     
     - name: Run ESLint (if configured)
       working-directory: ./prompt2Figma-Frontend (Plugin)
@@ -231,7 +231,7 @@ jobs:
     - name: Build Frontend
       working-directory: ./prompt2Figma-Frontend (Plugin)
       run: |
-        npm ci
+        npm install
         npm run build
     
     - name: Verify build artifacts
