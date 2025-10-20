@@ -1,5 +1,12 @@
 // Test setup file for device selection functionality tests
 
+// Polyfill crypto.getRandomValues for Node.js environment
+import { webcrypto } from 'crypto';
+
+if (typeof globalThis.crypto === 'undefined') {
+  (globalThis as any).crypto = webcrypto;
+}
+
 // Mock sessionStorage for testing
 const mockSessionStorage = (() => {
   let store: Record<string, string> = {};
