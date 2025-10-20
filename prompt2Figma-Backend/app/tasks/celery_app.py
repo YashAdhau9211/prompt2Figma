@@ -1,5 +1,5 @@
-from celery import Celery
 from app.core.config import settings
+from celery import Celery
 
 # Create the Celery instance.
 # The first argument 'prompt2figma' is the name of the current module.
@@ -12,7 +12,7 @@ celery_app = Celery(
     backend=settings.CELERY_RESULT_BACKEND,
     # This tells Celery where to find our task definitions. We will create
     # our tasks in the 'app.tasks.pipeline' module later.
-    include=["app.tasks.pipeline"]
+    include=["app.tasks.pipeline"],
 )
 
 # Celery configuration for better connection stability
@@ -30,14 +30,14 @@ celery_app.conf.update(
     task_reject_on_worker_lost=True,  # Reject tasks if worker is lost
     # Result backend settings
     result_backend_transport_options={
-        'master_name': 'mymaster',
-        'retry_on_timeout': True,
-        'socket_keepalive': True,
-        'socket_keepalive_options': {
-            'TCP_KEEPIDLE': 1,
-            'TCP_KEEPINTVL': 3,
-            'TCP_KEEPCNT': 5,
-        }
+        "master_name": "mymaster",
+        "retry_on_timeout": True,
+        "socket_keepalive": True,
+        "socket_keepalive_options": {
+            "TCP_KEEPIDLE": 1,
+            "TCP_KEEPINTVL": 3,
+            "TCP_KEEPCNT": 5,
+        },
     },
     # Enable connection recovery
     worker_cancel_long_running_tasks_on_connection_loss=False,

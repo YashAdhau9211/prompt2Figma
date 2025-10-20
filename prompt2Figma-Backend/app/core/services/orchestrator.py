@@ -1,9 +1,6 @@
+from app.tasks.pipeline import generate_react_code, generate_wireframe_json, validate_code_ast
 from celery import chain
-from app.tasks.pipeline import (
-    generate_wireframe_json,
-    generate_react_code,
-    validate_code_ast
-)
+
 
 def start_generation_pipeline(prompt: str):
     """
@@ -26,10 +23,10 @@ def start_generation_pipeline(prompt: str):
     workflow_chain = chain(
         generate_wireframe_json.s(prompt=prompt),
         generate_react_code.s(),
-        validate_code_ast.s()
+        validate_code_ast.s(),
     )
 
     # apply_async() executes the chain and returns an AsyncResult object immediately.
     result = workflow_chain.apply_async()
-    
+
     return result

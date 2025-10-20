@@ -1,13 +1,17 @@
 # app/api/v1/schemas.py
-from typing import Any, Dict, List, Optional, Literal
+from typing import Any, Dict, List, Literal, Optional
+
 from pydantic import BaseModel
+
 
 # already present in your code:
 class GenerationRequest(BaseModel):
     prompt: str
 
+
 class GenerationResponse(BaseModel):
     task_id: str
+
 
 class TaskStatusResponse(BaseModel):
     task_id: str
@@ -23,7 +27,9 @@ class WireframeResponse(BaseModel):
 # ✨ NEW: used by /generate-code
 class GenerateCodeRequest(BaseModel):
     layout_json: Dict[str, Any]
-    session_id: Optional[str] = None  # Optional session ID for iterative design integration
+    session_id: Optional[str] = (
+        None  # Optional session ID for iterative design integration
+    )
     version: Optional[int] = None  # Optional version number to use from session
 
 
@@ -37,4 +43,5 @@ class GenerateCodeResponse(BaseModel):
 
 class SessionCodeGenerationRequest(BaseModel):
     """Request to generate code from a specific session version."""
+
     version: Optional[int] = None  # If not provided, uses current version
