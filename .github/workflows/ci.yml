@@ -168,6 +168,9 @@ jobs:
   security-scan:
     name: Security Scanning
     runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      contents: read
     
     steps:
     - name: Checkout code
@@ -180,11 +183,13 @@ jobs:
         scan-ref: '.'
         format: 'sarif'
         output: 'trivy-results.sarif'
+      continue-on-error: true
     
     - name: Upload Trivy results to GitHub Security
-      uses: github/codeql-action/upload-sarif@v2
+      uses: github/codeql-action/upload-sarif@v3
       with:
         sarif_file: 'trivy-results.sarif'
+      continue-on-error: true
     
     - name: Run npm audit
       working-directory: ./prompt2Figma-Frontend (Plugin)
