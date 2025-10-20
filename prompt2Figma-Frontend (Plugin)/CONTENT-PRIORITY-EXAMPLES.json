@@ -1,0 +1,317 @@
+{
+  "examples": [
+    {
+      "title": "Example 1: Correct JSON with Explicit Text (Recommended)",
+      "description": "Always provide explicit text content using props.text for production wireframes",
+      "json": {
+        "componentName": "ProductName",
+        "type": "Text",
+        "props": {
+          "text": "Product A",
+          "fontSize": "16px",
+          "color": "#333333"
+        }
+      },
+      "expectedOutput": "Product A",
+      "contentSource": "props.text",
+      "isExplicit": true
+    },
+    {
+      "title": "Example 2: Using Content Property",
+      "description": "props.content is the second priority after props.text",
+      "json": {
+        "componentName": "Description",
+        "type": "Text",
+        "props": {
+          "content": "This is a product description",
+          "fontSize": "14px"
+        }
+      },
+      "expectedOutput": "This is a product description",
+      "contentSource": "props.content",
+      "isExplicit": true
+    },
+    {
+      "title": "Example 3: Using Title Property",
+      "description": "props.title is the third priority",
+      "json": {
+        "componentName": "Heading",
+        "type": "Text",
+        "props": {
+          "title": "Welcome to Nykaa",
+          "fontSize": "24px",
+          "fontWeight": 700
+        }
+      },
+      "expectedOutput": "Welcome to Nykaa",
+      "contentSource": "props.title",
+      "isExplicit": true
+    },
+    {
+      "title": "Example 4: Priority Test - Text Wins",
+      "description": "When multiple content properties exist, props.text takes priority",
+      "json": {
+        "componentName": "Label",
+        "type": "Text",
+        "props": {
+          "text": "Text Value",
+          "content": "Content Value",
+          "title": "Title Value"
+        }
+      },
+      "expectedOutput": "Text Value",
+      "contentSource": "props.text",
+      "isExplicit": true,
+      "note": "Only props.text is used, other properties are ignored"
+    },
+    {
+      "title": "Example 5: Fallback to Component Name",
+      "description": "When no explicit content is provided, component name is used as fallback",
+      "json": {
+        "componentName": "CategoryLabel",
+        "type": "Text",
+        "props": {
+          "fontSize": "14px"
+        }
+      },
+      "expectedOutput": "CategoryLabel",
+      "contentSource": "componentName",
+      "isExplicit": false,
+      "warning": "This is fallback behavior. Always provide explicit content in production."
+    },
+    {
+      "title": "Example 6: Empty String is Explicit Content",
+      "description": "Empty strings are treated as intentional explicit content",
+      "json": {
+        "componentName": "Spacer",
+        "type": "Text",
+        "props": {
+          "text": "",
+          "fontSize": "12px"
+        }
+      },
+      "expectedOutput": "",
+      "contentSource": "props.text",
+      "isExplicit": true,
+      "note": "Empty string does NOT fall back to other properties"
+    },
+    {
+      "title": "Example 7: Null Triggers Fallback",
+      "description": "null values are treated as 'not provided' and trigger fallback",
+      "json": {
+        "componentName": "Label",
+        "type": "Text",
+        "props": {
+          "text": null,
+          "content": "Fallback Content"
+        }
+      },
+      "expectedOutput": "Fallback Content",
+      "contentSource": "props.content",
+      "isExplicit": true,
+      "note": "null in props.text causes fallback to props.content"
+    },
+    {
+      "title": "Example 8: Number to String Conversion",
+      "description": "Non-string values are automatically converted to strings",
+      "json": {
+        "componentName": "Price",
+        "type": "Text",
+        "props": {
+          "text": 499,
+          "fontSize": "18px"
+        }
+      },
+      "expectedOutput": "499",
+      "contentSource": "props.text",
+      "isExplicit": true,
+      "note": "Number 499 is converted to string '499'"
+    },
+    {
+      "title": "Example 9: Boolean to String Conversion",
+      "description": "Boolean values are converted to 'true' or 'false' strings",
+      "json": {
+        "componentName": "IsAvailable",
+        "type": "Text",
+        "props": {
+          "text": true
+        }
+      },
+      "expectedOutput": "true",
+      "contentSource": "props.text",
+      "isExplicit": true,
+      "note": "Boolean true is converted to string 'true'"
+    },
+    {
+      "title": "Example 10: Nykaa Homepage - Product Card",
+      "description": "Real-world example: Product card with explicit content",
+      "json": {
+        "componentName": "ProductCard",
+        "type": "Frame",
+        "props": {
+          "layoutMode": "VERTICAL",
+          "padding": "16px",
+          "backgroundColor": "#FFFFFF"
+        },
+        "children": [
+          {
+            "componentName": "ProductImage",
+            "type": "Rectangle",
+            "props": {
+              "width": "200px",
+              "height": "200px",
+              "backgroundColor": "#F5F5F5"
+            }
+          },
+          {
+            "componentName": "ProductName",
+            "type": "Text",
+            "props": {
+              "text": "Nykaa Matte Lipstick",
+              "fontSize": "16px",
+              "fontWeight": 600
+            }
+          },
+          {
+            "componentName": "ProductPrice",
+            "type": "Text",
+            "props": {
+              "text": "₹499",
+              "fontSize": "18px",
+              "color": "#E91E63"
+            }
+          },
+          {
+            "componentName": "AddToCartButton",
+            "type": "Button",
+            "props": {
+              "text": "Add to Cart",
+              "backgroundColor": "#FC2779",
+              "color": "#FFFFFF"
+            }
+          }
+        ]
+      },
+      "expectedOutput": {
+        "ProductName": "Nykaa Matte Lipstick",
+        "ProductPrice": "₹499",
+        "AddToCartButton": "Add to Cart"
+      },
+      "note": "All text content is explicit and renders exactly as specified"
+    },
+    {
+      "title": "Example 11: Nykaa Homepage - Category Navigation",
+      "description": "Real-world example: Category labels with explicit content",
+      "json": {
+        "componentName": "CategorySection",
+        "type": "Frame",
+        "props": {
+          "layoutMode": "HORIZONTAL",
+          "padding": "16px"
+        },
+        "children": [
+          {
+            "componentName": "MakeupCategory",
+            "type": "Text",
+            "props": {
+              "text": "Makeup",
+              "fontSize": "14px"
+            }
+          },
+          {
+            "componentName": "SkincareCategory",
+            "type": "Text",
+            "props": {
+              "text": "Skincare",
+              "fontSize": "14px"
+            }
+          },
+          {
+            "componentName": "HairCategory",
+            "type": "Text",
+            "props": {
+              "text": "Hair",
+              "fontSize": "14px"
+            }
+          }
+        ]
+      },
+      "expectedOutput": {
+        "MakeupCategory": "Makeup",
+        "SkincareCategory": "Skincare",
+        "HairCategory": "Hair"
+      },
+      "note": "Category names render exactly as specified, no placeholder text"
+    },
+    {
+      "title": "Example 12: INCORRECT - Missing Explicit Content",
+      "description": "Anti-pattern: Relying on fallback behavior",
+      "json": {
+        "componentName": "Text",
+        "type": "Text",
+        "props": {
+          "fontSize": "16px"
+        }
+      },
+      "expectedOutput": "[Text]",
+      "contentSource": "generated",
+      "isExplicit": false,
+      "warning": "Generic component name with no explicit content results in placeholder",
+      "recommendation": "Always provide props.text with actual content"
+    }
+  ],
+  "bestPractices": [
+    {
+      "practice": "Always use explicit content properties",
+      "description": "Use props.text, props.content, or props.title for all text components",
+      "example": "{ \"text\": \"Product A\" }"
+    },
+    {
+      "practice": "Prefer props.text for consistency",
+      "description": "Use props.text as your primary content property across all components",
+      "example": "{ \"text\": \"Category Name\" }"
+    },
+    {
+      "practice": "Use descriptive component names",
+      "description": "Even with fallback, descriptive names are better than generic ones",
+      "good": "{ \"componentName\": \"ProductTitle\" }",
+      "bad": "{ \"componentName\": \"Text\" }"
+    },
+    {
+      "practice": "Validate JSON before rendering",
+      "description": "Use validateWireframeJSON() to catch missing content early",
+      "code": "const result = validateWireframeJSON(json);"
+    },
+    {
+      "practice": "Enable verbose logging for debugging",
+      "description": "Use setLogLevel('verbose') to see all content resolution decisions",
+      "code": "setLogLevel('verbose');"
+    }
+  ],
+  "commonMistakes": [
+    {
+      "mistake": "Assuming empty string falls back",
+      "description": "Empty strings are explicit content and do NOT trigger fallback",
+      "incorrect": "Expecting { \"text\": \"\" } to use props.content",
+      "correct": "{ \"text\": \"\" } renders empty text node"
+    },
+    {
+      "mistake": "Using multiple content properties",
+      "description": "Only the highest priority property is used",
+      "incorrect": "{ \"text\": \"A\", \"content\": \"B\" } expecting both to be used",
+      "correct": "Only \"A\" from props.text is rendered"
+    },
+    {
+      "mistake": "Relying on fallback in production",
+      "description": "Fallback is for safety, not for production use",
+      "incorrect": "Not providing props.text and expecting good results",
+      "correct": "Always provide explicit content for production wireframes"
+    },
+    {
+      "mistake": "Using generic component names",
+      "description": "Generic names like 'Text' result in placeholder generation",
+      "incorrect": "{ \"componentName\": \"Text\", \"props\": {} }",
+      "correct": "{ \"componentName\": \"ProductName\", \"props\": { \"text\": \"Product A\" } }"
+    }
+  ]
+}

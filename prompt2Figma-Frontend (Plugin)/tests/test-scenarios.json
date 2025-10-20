@@ -1,0 +1,261 @@
+{
+  "deviceSelectionScenarios": {
+    "validSelections": [
+      {
+        "name": "Mobile Selection",
+        "input": "mobile",
+        "expected": "mobile",
+        "description": "User selects mobile device type"
+      },
+      {
+        "name": "Desktop Selection", 
+        "input": "desktop",
+        "expected": "desktop",
+        "description": "User selects desktop device type"
+      },
+      {
+        "name": "Clear Selection",
+        "input": null,
+        "expected": null,
+        "description": "User clears device selection"
+      }
+    ],
+    "invalidSelections": [
+      {
+        "name": "Invalid String",
+        "input": "tablet",
+        "expected": null,
+        "description": "Invalid device type should fallback to null"
+      },
+      {
+        "name": "Empty String",
+        "input": "",
+        "expected": null,
+        "description": "Empty string should fallback to null"
+      },
+      {
+        "name": "Number Input",
+        "input": 123,
+        "expected": null,
+        "description": "Number input should fallback to null"
+      },
+      {
+        "name": "Boolean Input",
+        "input": true,
+        "expected": null,
+        "description": "Boolean input should fallback to null"
+      },
+      {
+        "name": "Object Input",
+        "input": {"device": "mobile"},
+        "expected": null,
+        "description": "Object input should fallback to null"
+      }
+    ]
+  },
+  "apiIntegrationScenarios": [
+    {
+      "name": "Mobile API Request",
+      "prompt": "Create a mobile login screen",
+      "devicePreference": "mobile",
+      "expectedPayload": {
+        "prompt": "Create a mobile login screen",
+        "devicePreference": "mobile"
+      },
+      "mockResponse": {
+        "layout_json": {"type": "frame", "componentName": "Mobile Login"},
+        "devicePreferenceUsed": true,
+        "detectedDevice": "mobile"
+      }
+    },
+    {
+      "name": "Desktop API Request",
+      "prompt": "Create an admin dashboard",
+      "devicePreference": "desktop", 
+      "expectedPayload": {
+        "prompt": "Create an admin dashboard",
+        "devicePreference": "desktop"
+      },
+      "mockResponse": {
+        "layout_json": {"type": "frame", "componentName": "Admin Dashboard"},
+        "devicePreferenceUsed": true,
+        "detectedDevice": "desktop"
+      }
+    },
+    {
+      "name": "Auto-detect API Request",
+      "prompt": "Create a user interface",
+      "devicePreference": null,
+      "expectedPayload": {
+        "prompt": "Create a user interface", 
+        "devicePreference": null
+      },
+      "mockResponse": {
+        "layout_json": {"type": "frame", "componentName": "User Interface"},
+        "devicePreferenceUsed": false,
+        "detectedDevice": "mobile"
+      }
+    },
+    {
+      "name": "Transmission Failure",
+      "prompt": "Create a mobile app",
+      "devicePreference": "mobile",
+      "expectedPayload": {
+        "prompt": "Create a mobile app",
+        "devicePreference": "mobile"
+      },
+      "mockResponse": {
+        "layout_json": {"type": "frame", "componentName": "Mobile App"},
+        "devicePreferenceUsed": false,
+        "detectedDevice": "desktop"
+      }
+    }
+  ],
+  "uiStateScenarios": [
+    {
+      "name": "Mobile Active State",
+      "activeDevice": "mobile",
+      "expectedStates": {
+        "mobile": {
+          "classList": ["active"],
+          "ariaChecked": "true",
+          "tabindex": "0"
+        },
+        "desktop": {
+          "classList": [],
+          "ariaChecked": "false", 
+          "tabindex": "-1"
+        }
+      }
+    },
+    {
+      "name": "Desktop Active State",
+      "activeDevice": "desktop",
+      "expectedStates": {
+        "mobile": {
+          "classList": [],
+          "ariaChecked": "false",
+          "tabindex": "-1"
+        },
+        "desktop": {
+          "classList": ["active"],
+          "ariaChecked": "true",
+          "tabindex": "0"
+        }
+      }
+    },
+    {
+      "name": "No Selection State",
+      "activeDevice": null,
+      "expectedStates": {
+        "mobile": {
+          "classList": [],
+          "ariaChecked": "false",
+          "tabindex": "0"
+        },
+        "desktop": {
+          "classList": [],
+          "ariaChecked": "false",
+          "tabindex": "-1"
+        }
+      }
+    }
+  ],
+  "edgeCaseScenarios": [
+    {
+      "name": "Rapid Switching",
+      "sequence": ["mobile", "desktop", "mobile", "desktop", null],
+      "expectedFinal": null,
+      "description": "Rapid device switching should maintain consistency"
+    },
+    {
+      "name": "Storage Quota Exceeded",
+      "devicePreference": "mobile",
+      "storageError": "QuotaExceededError",
+      "expectedBehavior": "preference_set_in_memory_only",
+      "description": "Should handle storage quota errors gracefully"
+    },
+    {
+      "name": "Corrupted State Recovery",
+      "corruptedState": "invalid-device-type",
+      "expectedRecovery": null,
+      "description": "Should detect and recover from corrupted state"
+    },
+    {
+      "name": "Session Timeout",
+      "storedPreference": "mobile",
+      "storedTimestamp": "expired",
+      "expectedBehavior": "clear_expired_data",
+      "description": "Should clear expired session data"
+    }
+  ],
+  "accessibilityScenarios": [
+    {
+      "name": "Screen Reader Announcements",
+      "deviceChanges": [
+        {
+          "device": "mobile",
+          "expectedAnnouncement": "Mobile device selected. Wireframes will be optimized for mobile screens."
+        },
+        {
+          "device": "desktop", 
+          "expectedAnnouncement": "Desktop device selected. Wireframes will be optimized for desktop screens."
+        },
+        {
+          "device": null,
+          "expectedAnnouncement": "Device selection cleared. AI will automatically detect the appropriate device type."
+        }
+      ]
+    },
+    {
+      "name": "Keyboard Navigation",
+      "keyboardActions": [
+        {
+          "key": "ArrowRight",
+          "currentFocus": 0,
+          "expectedFocus": 1,
+          "description": "Arrow right should move to next option"
+        },
+        {
+          "key": "ArrowLeft",
+          "currentFocus": 1,
+          "expectedFocus": 0,
+          "description": "Arrow left should move to previous option"
+        },
+        {
+          "key": "Enter",
+          "currentFocus": 0,
+          "expectedAction": "select_device",
+          "description": "Enter should select focused device"
+        },
+        {
+          "key": "Escape",
+          "currentFocus": 0,
+          "expectedAction": "clear_selection",
+          "description": "Escape should clear selection"
+        }
+      ]
+    }
+  ],
+  "performanceScenarios": [
+    {
+      "name": "High Frequency Operations",
+      "operations": 1000,
+      "maxDuration": 1000,
+      "description": "Should handle 1000 operations in under 1 second"
+    },
+    {
+      "name": "Memory Pressure",
+      "memoryPressure": true,
+      "expectedBehavior": "maintain_functionality",
+      "description": "Should maintain functionality under memory pressure"
+    },
+    {
+      "name": "Concurrent API Calls",
+      "concurrentCalls": 5,
+      "differentPreferences": true,
+      "expectedBehavior": "all_succeed",
+      "description": "Should handle concurrent API calls with different preferences"
+    }
+  ]
+}
