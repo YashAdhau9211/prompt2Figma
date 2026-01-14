@@ -110,7 +110,9 @@ jobs:
     
     - name: Build plugin
       working-directory: ./prompt2Figma-Frontend (Plugin)
-      run: npm run build
+      run: |
+        mkdir -p dist
+        npm run build
     
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3
@@ -240,6 +242,7 @@ jobs:
       working-directory: ./prompt2Figma-Frontend (Plugin)
       run: |
         npm install
+        mkdir -p dist
         npm run build
     
     - name: Verify build artifacts
