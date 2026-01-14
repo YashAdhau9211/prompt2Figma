@@ -60,6 +60,7 @@ class RedisPoolManager:
         self.serialization_format = serialization_format
 
         # Create connection pool with optimized settings
+        # Note: socket_keepalive_options disabled for cloud environments
         self.pool = ConnectionPool.from_url(
             redis_url,
             max_connections=max_connections,
@@ -67,11 +68,6 @@ class RedisPoolManager:
             socket_timeout=socket_timeout,
             socket_connect_timeout=socket_connect_timeout,
             socket_keepalive=socket_keepalive,
-            socket_keepalive_options=(
-                {1: 1, 2: 1, 3: 3}  # TCP_KEEPIDLE  # TCP_KEEPINTVL  # TCP_KEEPCNT
-                if socket_keepalive
-                else None
-            ),
         )
 
         self._redis_client: Optional[redis.Redis] = None
