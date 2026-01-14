@@ -5,6 +5,7 @@ import subprocess
 
 import google.generativeai as genai
 
+
 from .celery_app import celery_app
 
 # Configure logging
@@ -147,8 +148,8 @@ def normalize_children_fields(node: dict) -> dict:
     return sanitize_text_components(node)
 
 
-@celery_app.task(bind=True, max_retries=3, default_retry_delay=5)
-def generate_wireframe_json(self, prompt: str) -> dict:
+@celery_app.task(max_retries=3, default_retry_delay=5)
+def generate_wireframe_json(prompt: str) -> dict:
     """
     Task 1: Takes a text prompt and calls the Gemini API to generate a structured JSON output
     for a Figma wireframe.
@@ -262,11 +263,11 @@ def generate_wireframe_json(self, prompt: str) -> dict:
         logging.error(
             f"TASK 1: An error occurred with the Gemini API: {e}. Retrying..."
         )
-        raise self.retry(exc=e)
+        raise generate_wireframe_json.retry(exc=e)
 
 
-@celery_app.task(bind=True, max_retries=3, default_retry_delay=5)
-def generate_react_code(self, wireframe_json: dict) -> str:
+@celery_app.task(max_retries=3, default_retry_delay=5)
+def generate_react_code(wireframe_json: dict) -> str:
     """
     Task 2: Takes a detailed JSON structure and calls the Gemini API to convert it into a
     production-quality React component.
@@ -309,12 +310,12 @@ def generate_react_code(self, wireframe_json: dict) -> str:
         logging.error(
             f"TASK 2: An error occurred with the Gemini API: {e}. Retrying..."
         )
-        raise self.retry(exc=e)
+        raise generate_react_code.retry(exc=e)
 
 
 # This task remains the same
-@celery_app.task(bind=True)
-def validate_code_ast(self, react_code: str) -> dict:
+@celery_app.task()
+def validate_code_ast(react_code: str) -> dict:
     """
     Task 3: Validates the generated React code by piping it to a Node.js script
     that uses @babel/parser.

@@ -1,0 +1,55 @@
+services:
+  - type: web
+    name: prompt2figma-api
+    env: python
+    region: oregon
+    plan: free
+    buildCommand: "pip install -r requirements.txt && npm install"
+    startCommand: "uvicorn app.main:app --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.9.0
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: CELERY_BROKER_URL
+        fromDatabase:
+          name: prompt2figma-redis
+          property: connectionString
+      - key: CELERY_RESULT_BACKEND
+        fromDatabase:
+          name: prompt2figma-redis
+          property: connectionString
+      - key: REDIS_STATE_STORE_URL
+        fromDatabase:
+          name: prompt2figma-redis
+          property: connectionString
+
+  - type: worker
+    name: prompt2figma-worker
+    env: python
+    region: oregon
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "celery -A app.tasks.celery_app worker --loglevel=info"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.9.0
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: CELERY_BROKER_URL
+        fromDatabase:
+          name: prompt2figma-redis
+          property: connectionString
+      - key: CELERY_RESULT_BACKEND
+        fromDatabase:
+          name: prompt2figma-redis
+          property: connectionString
+      - key: REDIS_STATE_STORE_URL
+        fromDatabase:
+          name: prompt2figma-redis
+          property: connectionString
+
+databases:
+  - name: prompt2figma-redis
+    plan: free
+    ipAllowList: []

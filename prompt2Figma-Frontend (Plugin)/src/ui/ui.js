@@ -450,7 +450,7 @@ window.addEventListener("DOMContentLoaded", () => {
   // Initialize session persistence and restore device preference
   initializeSessionPersistence();
   
-  // Get DOM elements
+  // Get DOM elements with null checks
   const generateWireframeBtn = document.getElementById("generateWireframeBtn");
   const generateCodeBtn = document.getElementById("generateCodeBtn");
   const promptInput = document.getElementById("promptInput");
@@ -464,6 +464,13 @@ window.addEventListener("DOMContentLoaded", () => {
   const progressSection = document.getElementById("progressSection");
   const templateButtons = document.querySelectorAll(".template-btn");
   const deviceOptions = document.querySelectorAll(".device-option");
+
+  // Check if critical elements exist
+  if (!generateWireframeBtn || !generateCodeBtn || !promptInput) {
+    console.error("Critical UI elements not found in DOM");
+    showDevicePreferenceNotification('error', 'Plugin UI failed to load properly');
+    return;
+  }
 
   // Character counter with 3000 character limit enforcement
   const MAX_CHARS = 3000;
@@ -819,11 +826,30 @@ window.addEventListener("DOMContentLoaded", () => {
         hasPreference: currentDevicePreference !== null
       });
       
-      const res = await fetch("http://localhost:8000/api/v1/generate-wireframe", {
+      // Make backend URL configurable
+      const backendUrl = "http://localhost:8000";
+      
+      // Create AbortController for timeout
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+      
+      const res = await fetch(`${backendUrl}/api/v1/generate-wireframe`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(requestPayload)
+        body: JSON.stringify(requestPayload),
+        signal: controller.signal
       });
+      
+      clearTimeout(timeoutId);
+
+      // Check if the HTTP response was successful
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({ detail: 'Unknown error' }));
+        const errorMessage = errorData.detail || `Server returned ${res.status}`;
+        showStatus("error", "Wireframe Generation Failed", errorMessage);
+        hideProgress();
+        return;
+      }
 
       const data = await res.json();
 
@@ -957,6 +983,14 @@ window.addEventListener("DOMContentLoaded", () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ layout_json: layoutJson })
       });
+
+      // Check if the HTTP response was successful
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({ detail: 'Unknown error' }));
+        const errorMessage = errorData.detail || `Server returned ${res.status}`;
+        showStatus("error", "Code Generation Failed", errorMessage);
+        return;
+      }
 
       const data = await res.json();
 
@@ -1269,8 +1303,8 @@ window.testDevicePreferenceError = function(errorType = 'invalid_state') {
       console.log('Unknown error type. Available: invalid_state, storage_error, ui_error');
   }
 };
-// Foot
-er link handlers
+
+// Footer link handlers
 document.addEventListener('DOMContentLoaded', () => {
   const helpLink = document.getElementById('helpLink');
   const docsLink = document.getElementById('docsLink');

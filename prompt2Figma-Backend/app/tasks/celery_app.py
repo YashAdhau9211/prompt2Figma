@@ -10,9 +10,6 @@ celery_app = Celery(
     broker=settings.CELERY_BROKER_URL,
     # The backend is used to store task results. It's our "fast memory" (Redis).
     backend=settings.CELERY_RESULT_BACKEND,
-    # This tells Celery where to find our task definitions. We will create
-    # our tasks in the 'app.tasks.pipeline' module later.
-    include=["app.tasks.pipeline"],
 )
 
 # Celery configuration for better connection stability
@@ -41,4 +38,9 @@ celery_app.conf.update(
     },
     # Enable connection recovery
     worker_cancel_long_running_tasks_on_connection_loss=False,
+    # Explicitly set task modules
+    imports=['app.tasks.pipeline'],
 )
+
+# This must be called after conf.update to ensure proper initialization
+celery_app.autodiscover_tasks(['app.tasks'], force=True)

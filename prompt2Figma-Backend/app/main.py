@@ -28,3 +28,14 @@ async def root():
         "version": "1.0.0",
         "features": ["wireframe_generation", "code_generation", "iterative_design"],
     }
+
+
+@app.get("/health")
+async def health_check():
+    """Health check endpoint for monitoring"""
+    from datetime import datetime
+    return {
+        "status": "healthy",
+        "timestamp": datetime.now().isoformat(),
+        "service": "prompt2figma-api"
+    }

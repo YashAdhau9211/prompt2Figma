@@ -2,6 +2,11 @@
 
 An AI-powered Figma plugin that transforms natural language prompts into interactive UI designs with iterative editing capabilities.
 
+[![Deploy Status](https://img.shields.io/badge/deploy-ready-brightgreen)](QUICK_START.md)
+[![Free Tier](https://img.shields.io/badge/cost-$0%2Fmonth-blue)](DEPLOYMENT_GUIDE.md)
+[![Deployment Time](https://img.shields.io/badge/setup-30%20minutes-orange)](QUICK_START.md)
+[![Documentation](https://img.shields.io/badge/docs-comprehensive-success)](START_HERE.md)
+
 ## Overview
 
 Prompt2Figma is a full-stack application that bridges the gap between design ideation and implementation. It allows designers and developers to create Figma wireframes using natural language prompts, iteratively refine them through conversational edits, and generate production-ready React code.
@@ -86,7 +91,27 @@ prompt2Figma/
     └── package.json               # Node dependencies
 ```
 
-## Getting Started
+## 🚀 Quick Deploy (Free)
+
+**Want to deploy this for free and publish the plugin?**
+
+👉 **[QUICK START GUIDE](QUICK_START.md)** - Deploy in 30 minutes (Railway + Figma)
+
+👉 **[DEPLOYMENT GUIDE](DEPLOYMENT_GUIDE.md)** - Detailed guide with all hosting options
+
+👉 **[DEPLOYMENT SUMMARY](DEPLOYMENT_SUMMARY.md)** - Overview and checklist
+
+### Free Deployment Options
+- **Railway.app** - $5 free credit/month (recommended)
+- **Render.com** - 750 hours/month free
+- **Fly.io** - Generous free tier
+- **Google Gemini API** - 1,500 requests/day free
+
+**Total Cost: $0/month** for personal use or small teams!
+
+---
+
+## Getting Started (Local Development)
 
 ### Prerequisites
 

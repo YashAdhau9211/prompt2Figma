@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "dist/code.js",
   "scripts": {
-    "build": "node build.js && npm run build:ui",
+    "build": "npm run build:ui && node build.js",
     "build:ui": "inline-source src/ui/ui.html --compress false > dist/ui.html",
     "copy-ui-js": "cp src/ui/ui.js dist/ui.js",
     "test": "vitest --run",
