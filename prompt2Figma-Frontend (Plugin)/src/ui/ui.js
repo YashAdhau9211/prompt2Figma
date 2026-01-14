@@ -827,7 +827,7 @@ window.addEventListener("DOMContentLoaded", () => {
       });
       
       // Make backend URL configurable
-      const backendUrl = "http://localhost:8000";
+      const backendUrl = "https://prompt2figma-production.up.railway.app";
       
       // Create AbortController for timeout
       const controller = new AbortController();
