@@ -2,9 +2,11 @@
 
 from dotenv import load_dotenv
 from pydantic_settings import BaseSettings
+import os
 
-# This function reads the .env file from your project's root directory
-load_dotenv()
+# Only load .env file in development (not in production)
+if os.getenv("RAILWAY_ENVIRONMENT") is None:
+    load_dotenv()
 
 
 class Settings(BaseSettings):
@@ -22,7 +24,7 @@ class Settings(BaseSettings):
     CELERY_RESULT_BACKEND: str
 
     # Redis URL for state store (defaults to same as Celery backend if not specified)
-    REDIS_STATE_STORE_URL: str = "redis://localhost:6379"
+    REDIS_STATE_STORE_URL: str
 
     class Config:
         # This tells Pydantic to be case-insensitive when matching

@@ -1,0 +1,33 @@
+# Don't copy .env files into Docker images
+.env
+.env.*
+*.env
+
+# Don't copy git files
+.git
+.gitignore
+.gitattributes
+
+# Don't copy documentation
+*.md
+CHANGELOG.md
+CONTRIBUTING.md
+README.md
+
+# Don't copy test files
+tests/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.coverage
+
+# Don't copy IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Don't copy CI/CD files
+.github/
